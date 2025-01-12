@@ -40,7 +40,13 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    def testResult = bat(script: 'npm test', returnStdout: true)
+                    def testResult = bat(script: '''
+                        echo "Verificando entorno de Node.js y dependencias..."
+                        node -v
+                        npm -v
+                        npm ls --depth=0
+                        npm test
+                    ''', returnStdout: true)
 
                     echo "Resultados del Test: ${testResult}"
 
@@ -51,6 +57,7 @@ pipeline {
                 }
             }
         }
+
 
          stage('Build') {
             steps {
