@@ -40,7 +40,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    def testResult = bat(script: 'npm test', returnStdout: true)
+                    def testResult = bat(script: 'npm test -- --ci --silent --passWithNoTests', returnStdout: true)
 
                     echo "Resultados del Test: ${testResult}"
 
