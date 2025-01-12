@@ -23,13 +23,19 @@ pipeline {
         stage('Linter') {
             steps {
                 script {
-                    def lintResult = bat(script: 'npx eslint . --fix', returnStdout: true)
+                    def lintResult = bat(script: '''
+
+                        npx eslint . --fix
+                    
+                    ''', returnStdout: true)
                     
                     echo "Resultados del Linter: ${lintResult}"
 
                     if (lintResult.contains("error")) {
                         currentBuild.result = 'FAILURE'
                         error("Errores en el Linter")
+                    } else if (lintResult.contains("warning")) {
+                        echo "Advertencias en el Linter: ${lintResult}"
                     }
                 }
             }
@@ -41,11 +47,7 @@ pipeline {
             steps {
                 script {
                     def testResult = bat(script: '''
-                        echo "Verificando entorno de Node.js y dependencias..."
-                        node -v
-                        npm -v
-                        npm ls --depth=0
-                        npm test
+                        npm run test -- --coverage
                     ''', returnStdout: true)
 
                     echo "Resultados del Test: ${testResult}"
