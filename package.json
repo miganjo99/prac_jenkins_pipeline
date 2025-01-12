@@ -37,5 +37,11 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "jest": "^27.5.1"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/src/**/*.{test,spec}.js",
+      "<rootDir>/src/__tests__/**/*.{js,jsx,ts,tsx}"
+    ]
   }
 }
