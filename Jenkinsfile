@@ -23,7 +23,7 @@ pipeline {
         stage('Linter') {
             steps {
                 script {
-                    def lintResult = bat(script: 'npx eslint . --fix', returnStdout: true)
+                    def lintResult = bat(script: 'npx eslint .', returnStdout: true)
                     
                     echo "Resultados del Linter: ${lintResult}"
 
