@@ -23,7 +23,7 @@ pipeline {
         stage('Linter') {
             steps {
                 script {
-                    def lintResult = bat(script: '''
+                    def lintResult = sh(script: '''
 
                         npx eslint . --fix
                     
