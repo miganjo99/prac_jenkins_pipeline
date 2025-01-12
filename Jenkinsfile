@@ -9,14 +9,32 @@ pipeline {
     stages {
 
         
-        stage('Linter') {
+        stage('Install Dependencies') {
             steps {
                 script {
-                    bat 'npm install eslint' 
-                    bat 'npx eslint . --fix' 
+                    if (!fileExists('node_modules')) {
+                        bat 'npm install'
+                    }
                 }
             }
         }
+
+        stage('Linter') {
+            steps {
+                script {
+                    def lintResult = bat(script: 'npx eslint . --fix', returnStdout: true)
+                    
+                    echo "Resultados del Linter: ${lintResult}"
+
+                    if (lintResult.contains("error")) {
+                        currentBuild.result = 'FAILURE'
+                        error("Errores en el Linter")
+                    }
+                }
+            }
+        }
+
+
 
         stage('info') {
             steps {
