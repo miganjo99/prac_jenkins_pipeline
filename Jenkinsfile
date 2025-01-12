@@ -44,7 +44,6 @@ pipeline {
                         echo "Verificando entorno de Node.js y dependencias..."
                         node -v
                         npm -v
-                        npm ls --depth=0
                         npm test
                     ''', returnStdout: true)
 
