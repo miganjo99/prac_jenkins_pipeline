@@ -1,5 +1,7 @@
 const fs = require('fs');
-const path = require('path');
+const simpleGit = require('simple-git');
+
+const git = simpleGit();
 
 const readmePath = './README.md';
 
@@ -9,37 +11,29 @@ const badges = {
 };
 
 const testResult = process.argv[2] || 'success'; 
-
-if (!['success', 'failure'].includes(testResult)) {
-    console.error('El resultado de los tests debe ser "success" o "failure".');
-    process.exit(1);
-}
-
 const badge = badges[testResult];
 
-function updateReadme() {
+async function updateReadme() {
     try {
-        if (!fs.existsSync(readmePath)) {
-            console.error('El archivo README.md no se encuentra.');
-            process.exit(1);
-        }
-
         let readmeContent = fs.readFileSync(readmePath, 'utf-8');
 
         const resultSection = 'RESULTADO DE LOS ÚLTIMOS TESTS';
         const badgeSection = `${resultSection}\n\n${badge}`;
 
-        if (readmeContent.includes(resultSection)) {
-            readmeContent = readmeContent.replace(new RegExp(`${resultSection}.*`, 's'), badgeSection);
-        } else {
-            readmeContent += `\n\n## ${resultSection}\n\n${badge}`;
-        }
+        readmeContent = readmeContent.includes(resultSection) 
+            ? readmeContent.replace(new RegExp(`${resultSection}.*`, 's'), badgeSection)
+            : `${readmeContent}\n\n## ${resultSection}\n\n${badge}`;
 
         fs.writeFileSync(readmePath, readmeContent, 'utf-8');
         console.log(`README.md actualizado con el resultado de los tests: ${testResult}`);
+
+        await git.add('README.md');
+        await git.commit(`Pipeline ejecutada - Motivo: ${testResult}`);
+        await git.push();
+
+        console.log('Cambios de README.md pusheados correctamente.');
     } catch (error) {
-        console.error('Error al actualizar el README.md:', error.message);
-        process.exit(1);
+        console.error('Error:', error.message);
     }
 }
 

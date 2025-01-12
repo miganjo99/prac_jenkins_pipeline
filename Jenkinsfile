@@ -19,6 +19,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Linter') {
+            steps {
+                script {
+                    def lintResult = bat(script: '''
+
+                        npx eslint . --fix
+                    
+                    ''', returnStdout: true)
+                    
+                    echo "Resultados del Linter: ${lintResult}"
+
+                    if (lintResult.contains("error")) {
+                        currentBuild.result = 'FAILURE'
+                        error("Errores en el Linter")
+                    } else if (lintResult.contains("warning")) {
+                        echo "Advertencias en el Linter: ${lintResult}"
+                    }
+                }
+            }
+        }
+
+
+
         stage('Test') {
             steps {
                 script {
@@ -58,10 +82,23 @@ pipeline {
                 script {
                     def testResult = currentBuild.result == 'SUCCESS' ? 'success' : 'failure'
 
-                    bat(script: "node jenkinsScripts/updateReadme.js ${testResult}", returnStdout: true)
+                    bat(script: "node jenkinsScripts/updateReadme.js ${UpdateResult}", returnStdout: true)
                 }
             }
         }
+
+
+        stage('Push_Changes') {
+            steps {
+                script {
+                    env.PARAM_EXECUTOR = 'Jenkins'
+                    env.PARAM_MOTIU = 'Actualización del README'
+
+                    bat (script: "node jenkinsScripts/pushChanges.js ${PushResult}", returnStdout: true )
+                }
+            }
+        }
+
 
 
 
