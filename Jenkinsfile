@@ -12,8 +12,8 @@ pipeline {
         stage('Linter') {
             steps {
                 script {
-                    sh 'npm install eslint' 
-                    sh 'npx eslint . --fix' 
+                    bat 'npm install eslint' 
+                    bat 'npx eslint . --fix' 
                 }
             }
         }
