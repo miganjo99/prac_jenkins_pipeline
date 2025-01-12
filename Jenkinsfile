@@ -13,6 +13,7 @@ pipeline {
             steps {
                 script {
                     if (!fileExists('node_modules')) {
+                        bat 'npm install eslint eslint-plugin-react --save-dev'
                         bat 'npm install'
                     }
                 }
@@ -36,6 +37,37 @@ pipeline {
 
 
 
+        stage('Test') {
+            steps {
+                script {
+                    def testResult = bat(script: 'npm test -- --ci --silent', returnStdout: true)
+
+                    echo "Resultados del Test: ${testResult}"
+
+                    if (testResult.contains("Test suite failed")) {
+                        currentBuild.result = 'FAILURE'
+                        error("Errores en los tests")
+                    }
+                }
+            }
+        }
+
+         stage('Build') {
+            steps {
+                script {
+                    def buildResult = bat(script: 'npm run build', returnStdout: true)
+
+                    echo "Resultado del Build: ${buildResult}"
+
+                    if (buildResult.contains("ERROR")) {
+                        currentBuild.result = 'FAILURE'
+                        error("El build ha fallado")
+                    }
+                }
+            }
+        }
+
+
         stage('info') {
             steps {
                 script {
@@ -49,5 +81,10 @@ pipeline {
                 }
             }
         }
+
+       
+
+
+
     }
 }
