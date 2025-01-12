@@ -1,4 +1,4 @@
-// __tests__/sum.test.js
+// src/__tests__/sum.test.js
 const sum = require('../../sum'); 
 
 test('Suma 1 + 2 para dar 3', () => {
