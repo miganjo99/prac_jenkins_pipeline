@@ -35,20 +35,15 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "@testing-library/jest-dom": "^6.6.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-testing-library": "^5.11.1",
     "jest": "^27.5.1"
-  },
-  "jest": {
-    "testMatch": [
-      "<rootDir>/src/**/*.{test,spec}.js",
-      "<rootDir>/src/__tests__/**/*.{js,jsx,ts,tsx}"
-    ]
   }
+  
 }
