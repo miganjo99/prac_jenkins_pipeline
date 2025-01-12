@@ -7,6 +7,17 @@ pipeline {
     }
 
     stages {
+
+        
+        stage('Linter') {
+            steps {
+                script {
+                    sh 'npm install eslint' 
+                    sh 'npx eslint . --fix' 
+                }
+            }
+        }
+
         stage('info') {
             steps {
                 script {
