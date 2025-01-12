@@ -75,6 +75,18 @@ pipeline {
         }
 
 
+        stage('Update_Readme') {
+            steps {
+                script {
+                    def testResult = currentBuild.result == 'SUCCESS' ? 'success' : 'failure'
+
+                    bat(script: "node jenkinsScripts/updateReadme.js ${testResult}", returnStdout: true)
+                }
+            }
+        }
+
+
+
         stage('info') {
             steps {
                 script {
