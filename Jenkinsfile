@@ -1,32 +1,22 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'EXECUTOR', defaultValue: 'usuario_default', description: 'Nombre propietario de la pipeline')
+        string(name: 'MOTIU', defaultValue: 'Motivo por defecto', description: 'Why?')
+        string(name: 'CHAT_ID', defaultValue: '123456', description: 'Chat ID Telegram')
+    }
 
     stages {
         stage('info') {
             steps {
                 script {
-                    def executor = input(
-                        message: 'Intro nombre:',
-                        parameters: [string(name: 'Executor', description: 'Nombre propietario de la pipeline')]
-                    )
+                    echo "Executor: ${params.EXECUTOR}"
+                    echo "Motiu: ${params.MOTIU}"
+                    echo "Chat ID: ${params.CHAT_ID}"
 
-                    def motiu = input(
-                        message: 'Intro execucio:',
-                        parameters: [string(name: 'Motiu', description: 'why?')]
-                    )
-
-                    def chatID = input(
-                        message: 'Intro Chat ID de Telegram:',
-                        parameters: [string(name: 'Chat ID', description: 'Chat ID Telegram')]
-                    )
-
-                    echo "Executor: ${executor}"
-                    echo "Motiu: ${motiu}"
-                    echo "Chat ID: ${chatID}"
-
-                    env.EXECUTOR = executor
-                    env.MOTIU = motiu
-                    env.CHAT_ID = chatID
+                    env.EXECUTOR = params.EXECUTOR
+                    env.MOTIU = params.MOTIU
+                    env.CHAT_ID = params.CHAT_ID
                 }
             }
         }
